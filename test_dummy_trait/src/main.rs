@@ -1,6 +1,6 @@
 use dummy_trait::DummyTrait;
 
-// #[derive(DummyTrait)]
+#[derive(DummyTrait)]
 enum TestEnum<'a, A: Copy, B, C, const N: usize>
 where
 	C: Copy,
@@ -10,15 +10,15 @@ where
 	VarC { nums: [u8; N], c: Option<C> },
 }
 
-// #[derive(DummyTrait)]
+#[derive(DummyTrait)]
 struct TestUnitStruct;
 
-// #[derive(DummyTrait)]
+#[derive(DummyTrait)]
 struct TestTupleStruct<'a, A: Copy, B>(&'a A, B)
 where
 	B: Copy;
 
-// #[derive(DummyTrait)]
+#[derive(DummyTrait)]
 struct TestStruct<'a, A: Copy, B>
 where
 	B: Copy,
