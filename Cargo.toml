@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "dummy_trait",
+    "dummy_trait_derive",
+    "test_dummy_trait",
+]

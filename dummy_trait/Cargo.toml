@@ -1,0 +1,11 @@
+[package]
+name = "dummy_trait"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dummy_trait_derive = { path = "../dummy_trait_derive", optional = true }
+
+[features]
+default = ["derive"]
+derive = ["dummy_trait_derive"]
