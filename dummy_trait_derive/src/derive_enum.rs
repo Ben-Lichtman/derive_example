@@ -10,20 +10,13 @@ pub fn generate_enum(ident: &Ident, data: &DataEnum, generics: &mut Generics) ->
 			#i: ::dummy_trait::DummyTrait
 		}
 	});
-	let (impl_generics, ty_generics, whereclause) = generics.split_for_impl();
 
-	let fn_inner = construct_fn_inner(data);
-
-	quote! {
-		impl #impl_generics ::dummy_trait::DummyTrait for #ident #ty_generics #whereclause {
-			fn foo(&self) {
-				#fn_inner
-			}
-		}
-	}
+	construct(ident, data, generics)
 }
 
-fn construct_fn_inner(data: &DataEnum) -> TokenStream {
+fn construct(ident: &Ident, data: &DataEnum, generics: &Generics) -> TokenStream {
+	let (impl_generics, ty_generics, whereclause) = generics.split_for_impl();
+
 	let variant_info = data
 		.variants
 		.iter()
@@ -40,8 +33,12 @@ fn construct_fn_inner(data: &DataEnum) -> TokenStream {
 		}
 	});
 	quote! {
-		match self {
-			#(#match_arms),*
+		impl #impl_generics ::dummy_trait::DummyTrait for #ident #ty_generics #whereclause {
+			fn foo(&self) {
+				match self {
+					#(#match_arms),*
+				}
+			}
 		}
 	}
 }

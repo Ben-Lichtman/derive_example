@@ -43,7 +43,7 @@ impl<'a> FieldsExtender<'a> {
 	}
 }
 
-pub fn regular_ident(n: usize, ident: &Ident) -> Ident { format_ident!("{}", ident) }
+pub fn regular_ident(_n: usize, ident: &Ident) -> Ident { format_ident!("{}", ident) }
 
 pub fn tuple_ident(n: usize) -> Ident { format_ident!("field_{}", n) }
 

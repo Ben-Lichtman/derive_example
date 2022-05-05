@@ -10,27 +10,23 @@ pub fn generate_struct(ident: &Ident, data: &DataStruct, generics: &mut Generics
 			#i: ::dummy_trait::DummyTrait
 		}
 	});
-	let (impl_generics, ty_generics, whereclause) = generics.split_for_impl();
 
-	let fn_inner = construct_fn_inner(data);
-
-	quote! {
-		impl #impl_generics ::dummy_trait::DummyTrait for #ident #ty_generics #whereclause {
-			fn foo(&self) {
-				#fn_inner
-			}
-		}
-	}
+	construct(ident, data, generics)
 }
 
-fn construct_fn_inner(data: &DataStruct) -> TokenStream {
+fn construct(ident: &Ident, data: &DataStruct, generics: &Generics) -> TokenStream {
+	let (impl_generics, ty_generics, whereclause) = generics.split_for_impl();
 	let expander = FieldsExtender::from_fields(&data.fields);
 	let expanded = expander.expand_fields();
 
 	let lines = expander.idents().map(|i| quote! { #i.foo(); });
 
 	quote! {
-		let Self #expanded = self;
-		#(#lines)*
+		impl #impl_generics ::dummy_trait::DummyTrait for #ident #ty_generics #whereclause {
+			fn foo(&self) {
+				let Self #expanded = self;
+				#(#lines)*
+			}
+		}
 	}
 }
