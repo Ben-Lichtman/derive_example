@@ -1,4 +1,4 @@
-use crate::common::{extra_where_predicates, FieldsExpander};
+use crate::common::{extra_where_predicates, FieldsExtender};
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::{parse_quote, DataStruct, Generics, Ident, WherePredicate};
@@ -24,6 +24,13 @@ pub fn generate_struct(ident: &Ident, data: &DataStruct, generics: &mut Generics
 }
 
 fn construct_fn_inner(data: &DataStruct) -> TokenStream {
-	let expanded = FieldsExpander::from_fields(&data.fields).expand_fields();
-	quote! { let Self #expanded = self; }
+	let expander = FieldsExtender::from_fields(&data.fields);
+	let expanded = expander.expand_fields();
+
+	let lines = expander.idents().map(|i| quote! { #i.foo(); });
+
+	quote! {
+		let Self #expanded = self;
+		#(#lines)*
+	}
 }

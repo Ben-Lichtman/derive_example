@@ -1,4 +1,4 @@
-use crate::common::{extra_where_predicates, FieldsExpander};
+use crate::common::{extra_where_predicates, FieldsExtender};
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::{parse_quote, DataEnum, Generics, Ident, WherePredicate};
@@ -30,9 +30,13 @@ fn construct_fn_inner(data: &DataEnum) -> TokenStream {
 		.map(|v| (&v.ident, &v.fields))
 		.collect::<Vec<_>>();
 	let match_arms = variant_info.iter().map(|(i, f)| {
-		let expanded = FieldsExpander::from_fields(f).expand_fields();
+		let expander = FieldsExtender::from_fields(f);
+		let expanded = expander.expand_fields();
+
+		let lines = expander.idents().map(|i| quote! { #i.foo(); });
+
 		quote! {
-			Self::#i #expanded => {}
+			Self::#i #expanded => { #(#lines)* }
 		}
 	});
 	quote! {

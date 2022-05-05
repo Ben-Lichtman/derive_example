@@ -1,7 +1,7 @@
 use dummy_trait::DummyTrait;
 
 #[derive(DummyTrait)]
-enum TestEnum<'a, A: Copy, B, C, const N: usize>
+pub enum TestEnum<'a, A: Copy, B, C, const N: usize>
 where
 	C: Copy,
 {
@@ -11,15 +11,15 @@ where
 }
 
 #[derive(DummyTrait)]
-struct TestUnitStruct;
+pub struct TestUnitStruct;
 
 #[derive(DummyTrait)]
-struct TestTupleStruct<'a, A: Copy, B>(&'a A, B)
+pub struct TestTupleStruct<'a, A: Copy, B>(&'a A, B)
 where
 	B: Copy;
 
 #[derive(DummyTrait)]
-struct TestStruct<'a, A: Copy, B>
+pub struct TestStruct<'a, A: Copy, B>
 where
 	B: Copy,
 {
