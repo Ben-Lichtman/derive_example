@@ -26,7 +26,7 @@ fn construct(ident: &Ident, data: &DataEnum, generics: &Generics) -> TokenStream
 		let expander = FieldsExtender::from_fields(f);
 		let expanded = expander.expand_fields();
 
-		let lines = expander.idents().map(|i| quote! { #i.foo(); });
+		let lines = expander.info().map(|(i, _)| quote! { #i.foo(); });
 
 		quote! {
 			Self::#i #expanded => { #(#lines)* }

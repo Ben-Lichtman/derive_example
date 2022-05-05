@@ -19,7 +19,7 @@ fn construct(ident: &Ident, data: &DataStruct, generics: &Generics) -> TokenStre
 	let expander = FieldsExtender::from_fields(&data.fields);
 	let expanded = expander.expand_fields();
 
-	let lines = expander.idents().map(|i| quote! { #i.foo(); });
+	let lines = expander.info().map(|(i, _)| quote! { #i.foo(); });
 
 	quote! {
 		impl #impl_generics ::dummy_trait::DummyTrait for #ident #ty_generics #whereclause {

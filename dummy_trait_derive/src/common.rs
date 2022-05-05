@@ -1,6 +1,6 @@
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
-use syn::{Fields, Generics, Ident, TypeParam, WherePredicate};
+use syn::{Fields, Generics, Ident, Type, TypeParam, WherePredicate};
 
 pub struct FieldsExtender<'a> {
 	fields: &'a Fields,
@@ -35,10 +35,10 @@ impl<'a> FieldsExtender<'a> {
 		}
 	}
 
-	pub fn idents(&self) -> impl Iterator<Item = Ident> + 'a {
+	pub fn info(&self) -> impl Iterator<Item = (Ident, Type)> + 'a {
 		self.fields.iter().enumerate().map(|(n, f)| match &f.ident {
-			Some(i) => regular_ident(n, i),
-			None => tuple_ident(n),
+			Some(i) => (regular_ident(n, i), f.ty.clone()),
+			None => (tuple_ident(n), f.ty.clone()),
 		})
 	}
 }
